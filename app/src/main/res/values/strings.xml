@@ -1,0 +1,7 @@
+<resources>
+    <string name="appName">spotbubsort003</string>
+    <string name="dummyText">this is dummy text</string>
+    <string name="buttonText">Run</string>
+    <string name="switch1Label">Dec/Inc</string>
+    <string name="switch2Label">Auto</string>
+</resources>
