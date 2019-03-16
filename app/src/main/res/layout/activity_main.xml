@@ -8,7 +8,7 @@
     android:descendantFocusability="beforeDescendants"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="central.com.MainActivity">
+    tools:context="org.central.MainActivity">
 
     <Button
         android:id="@+id/clear"

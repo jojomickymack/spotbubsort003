@@ -134,7 +134,7 @@ vector<pair<string, int>> bubbleSortArtistsByPopularity(vector<pair<string, int>
 
 extern "C"
 
-jstring Java_central_com_MainActivity_parseDumpJsonJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
+jstring Java_org_central_MainActivity_parseDumpJsonJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
     string cstring = ConvertJString(env, myJsonJstring);
     json cjson = json::parse(cstring);
     string output = cjson.dump(2);
@@ -148,7 +148,7 @@ jstring Java_central_com_MainActivity_parseDumpJsonJNI(JNIEnv *env, jobject /* t
 
 extern "C"
 
-jstring Java_central_com_MainActivity_parseTokenJsonGetTokenJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
+jstring Java_org_central_MainActivity_parseTokenJsonGetTokenJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
     string cstring = ConvertJString(env, myJsonJstring);
     json cjson = json::parse(cstring);
     string output = "";
@@ -164,7 +164,7 @@ jstring Java_central_com_MainActivity_parseTokenJsonGetTokenJNI(JNIEnv *env, job
 
 extern "C"
 
-jstring Java_central_com_MainActivity_parseSearchJsonGetArtistIdJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
+jstring Java_org_central_MainActivity_parseSearchJsonGetArtistIdJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
     string cstring = ConvertJString(env, myJsonJstring);
     json cjson = json::parse(cstring);
     string output = "";
@@ -180,7 +180,7 @@ jstring Java_central_com_MainActivity_parseSearchJsonGetArtistIdJNI(JNIEnv *env,
 
 extern "C"
 
-jstring Java_central_com_MainActivity_parseArtistAlbumsJsonGetAlbumIdJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
+jstring Java_org_central_MainActivity_parseArtistAlbumsJsonGetAlbumIdJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
     string cstring = ConvertJString(env, myJsonJstring);
     json cjson = json::parse(cstring);
     string output = "";
@@ -196,7 +196,7 @@ jstring Java_central_com_MainActivity_parseArtistAlbumsJsonGetAlbumIdJNI(JNIEnv 
 
 extern "C"
 
-jstring Java_central_com_MainActivity_parseAlbumTracksJsonGetTrackIdJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
+jstring Java_org_central_MainActivity_parseAlbumTracksJsonGetTrackIdJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
     string cstring = ConvertJString(env, myJsonJstring);
     json cjson = json::parse(cstring);
     string output = "";
@@ -213,7 +213,7 @@ extern "C"
 JNIEXPORT jobject
 JNICALL
 
-Java_central_com_MainActivity_returnLinkedHashMapJNI(JNIEnv *env, jobject /* this */) {
+Java_org_central_MainActivity_returnLinkedHashMapJNI(JNIEnv *env, jobject /* this */) {
     map<string, string> myMap = {{"key1", "super_c_val"}, {"key2", "value2"}, {"key3", "value3"}, {"key4", "value4"}};
     return getJavaLinkedHashMapStringsFromCppMap(env, myMap);
 }
@@ -226,7 +226,7 @@ extern "C"
 JNIEXPORT jobject
 JNICALL
 
-Java_central_com_MainActivity_returnIntLinkedHashMapJNI(JNIEnv *env, jobject /* this */) {
+Java_org_central_MainActivity_returnIntLinkedHashMapJNI(JNIEnv *env, jobject /* this */) {
     map<string, int> myMap = {{"key1", 52}, {"key2", 12}, {"key3", 19}, {"key4", 82}};
     return getJavaLinkedHashMapFromCppMap(env, myMap);
 }
@@ -236,20 +236,18 @@ Java_central_com_MainActivity_returnIntLinkedHashMapJNI(JNIEnv *env, jobject /* 
  */
 
 extern "C"
-JNIEXPORT jobject
-JNICALL
-
-Java_central_com_MainActivity_relatedArtistsJsonToLinkedHashMapJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring, bool ascending) {
-    string cstring = ConvertJString(env, myJsonJstring);
+JNIEXPORT jobject JNICALL
+Java_org_central_MainActivity_relatedArtistsJsonToLinkedHashMapJNI(JNIEnv *env, jobject instance, jstring myJson_, jboolean myAsc) {
+    string cstring = ConvertJString(env, myJson_);
     json cjson = json::parse(cstring);
     string output = "";
     vector<pair<string, int>> myArtistsVector = {};
     cjson = cjson["artists"];
 
     for (int i = 0; i < (int)cjson.size(); i++) {
-        output += cjson[i]["name"];
+        output += cjson[i]["name"].get<string>();
         output += " - ";
-        string name = cjson[i]["name"];
+        string name = cjson[i]["name"].get<string>();
         int popularity = static_cast<int>(cjson[i]["popularity"]);
         output += to_string(popularity);
         output += "\n";
@@ -257,7 +255,7 @@ Java_central_com_MainActivity_relatedArtistsJsonToLinkedHashMapJNI(JNIEnv *env, 
         myArtistsVector.push_back(myPair);
     }
 
-    return getJavaLinkedHashMapFromCppVector(env, bubbleSortArtistsByPopularity(myArtistsVector, ascending));
+    return getJavaLinkedHashMapFromCppVector(env, bubbleSortArtistsByPopularity(myArtistsVector, myAsc));
 }
 
 /**
@@ -267,7 +265,7 @@ Java_central_com_MainActivity_relatedArtistsJsonToLinkedHashMapJNI(JNIEnv *env, 
 
 extern "C"
 
-jstring Java_central_com_MainActivity_parseSearchJsonGetFollowersJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
+jstring Java_org_central_MainActivity_parseSearchJsonGetFollowersJNI(JNIEnv *env, jobject /* this */, jstring myJsonJstring) {
     string cstring = ConvertJString(env, myJsonJstring);
     json cjson = json::parse(cstring);
     string output = "";
@@ -279,4 +277,11 @@ jstring Java_central_com_MainActivity_parseSearchJsonGetFollowersJNI(JNIEnv *env
     }
 
     return env->NewStringUTF(output.c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_central_MainActivity_getStringJNI(JNIEnv *env, jobject instance) {
+    // this is the 'hello world' function
+    return env->NewStringUTF("testing");
 }

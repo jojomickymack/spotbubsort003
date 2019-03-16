@@ -1,4 +1,4 @@
-package central.com;
+package org.central;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -6,18 +6,18 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SpotifyGetTrack implements Runnable {
+public class SpotifyGetAlbum implements Runnable {
     private String response = "no response received";
-    private String tracksEndpoint = "https://api.spotify.com/v1/tracks/";
-    private String trackId = "";
+    private String albumsEndpoint = "https://api.spotify.com/v1/albums/";
+    private String albumId = "";
     private String token = "";
 
-    public SpotifyGetTrack (String token) {
+    public SpotifyGetAlbum (String token) {
         this.token = token;
     }
 
-    public void setTrackId(String trackId) {
-        this.trackId = trackId;
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class SpotifyGetTrack implements Runnable {
             this.response = "no token";
         } else {
             try {
-                URL url = new URL(tracksEndpoint + trackId);
+                URL url = new URL(albumsEndpoint + albumId);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Authorization", "Bearer " + this.token);
                 try {
@@ -50,4 +50,3 @@ public class SpotifyGetTrack implements Runnable {
         return this.response;
     }
 }
-

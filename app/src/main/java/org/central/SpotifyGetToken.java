@@ -1,4 +1,4 @@
-package central.com;
+package org.central;
 
 import android.util.Log;
 
@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.*;
 
 public class SpotifyGetToken implements Runnable {

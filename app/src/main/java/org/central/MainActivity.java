@@ -1,4 +1,4 @@
-package central.com;
+package org.central;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,8 +17,8 @@ import java.util.LinkedHashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String clientId = "your_clientid";
-    private String clientSecret = "your_clientsecret";
+    private String clientId = "your_client_id";
+    private String clientSecret = "your_client_secret";
     private String token = "";
     private String myText = "";
     private boolean ascending = false;
@@ -80,45 +80,27 @@ public class MainActivity extends AppCompatActivity {
 
         myButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
 /*
-                myText = mapsJNI();
+                // this is just a hello world thing to test passing types through the native interface
+                myText = getStringJNI();
                 LinkedHashMap<String, String> myMap = returnLinkedHashMapJNI();
                 myText = myMap.get("key1");
 */
-/*
-                // search artist and get followers of the first one
 
-                myText = parseSearchJsonGetFollowersJNI(artistSearchJson);
-*/
 /*
-                // get recommendations
-                SpotifyGetArtistRecommendations artistRecommendationsRequest = new SpotifyGetArtistRecommendations(token);
-                artistRecommendationsRequest.setArtistId(getArtistId(artistSearchJson));
+                // search artist and get # 0f followers of the first artist in search results - example run dmc gives 531532
 
-                Thread recommendationThread = new Thread(artistRecommendationsRequest);
-                recommendationThread.start();
-                try { recommendationThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-                myText = recommendationJsonToLinkedHashMapJNI(artistRecommendationsRequest.getResponse());
- */
-/*
                 SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
                 Thread ssaRequestThread = new Thread(ssaRequest);
                 ssaRequest.setSearchTerm(myArtist);
                 ssaRequestThread.start();
                 try { ssaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
                 String artistSearchJson = ssaRequest.getResponse();
-
-                // get similar artists
-                SpotifyGetArtistSimilarArtists sgasaRequest = new SpotifyGetArtistSimilarArtists(token);
-                sgasaRequest.setArtistId(getArtistId(artistSearchJson));
-
-                Thread sgasaRequestThread = new Thread(sgasaRequest);
-                sgasaRequestThread.start();
-                try { sgasaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-
-                myText = relatedArtistsJsonToLinkedHashMapJNI(sgasaRequest.getResponse());
+                myText = parseSearchJsonGetFollowersJNI(artistSearchJson);
 */
 
+                // this will return a list of related artists - sorted by popularity
                 SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
                 Thread ssaRequestThread = new Thread(ssaRequest);
                 ssaRequest.setSearchTerm(myArtist);
@@ -144,6 +126,101 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 myText = sb.toString();
+
+/*
+                // this returns the json response from a request for similar artists with thumbnail images etc
+                SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
+                Thread ssaRequestThread = new Thread(ssaRequest);
+                ssaRequest.setSearchTerm(myArtist);
+                ssaRequestThread.start();
+                try { ssaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+                String artistSearchJson = ssaRequest.getResponse();
+
+                SpotifyGetArtistSimilarArtists sgasaRequest = new SpotifyGetArtistSimilarArtists(token);
+                sgasaRequest.setArtistId(getArtistId(artistSearchJson));
+
+                Thread sgasaRequestThread = new Thread(sgasaRequest);
+                sgasaRequestThread.start();
+                try { sgasaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+
+                myText += parseDumpJsonJNI(sgasaRequest.getResponse());
+*/
+/*
+                // this returns the response from the artist endpoint using he artistId
+                SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
+                Thread ssaRequestThread = new Thread(ssaRequest);
+                ssaRequest.setSearchTerm(myArtist);
+                ssaRequestThread.start();
+                try { ssaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+                String artistSearchJson = ssaRequest.getResponse();
+
+                SpotifyGetArtist artistRequest = new SpotifyGetArtist(token);
+                artistRequest.setArtistId(getArtistId(artistSearchJson));
+                Thread artistThread = new Thread(artistRequest);
+                artistThread.start();
+                try { artistThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+
+                myText = artistRequest.getResponse();
+*/
+/*
+                // this gives you the list of albums by the searched artist
+                SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
+                Thread ssaRequestThread = new Thread(ssaRequest);
+                ssaRequest.setSearchTerm(myArtist);
+                ssaRequestThread.start();
+                try { ssaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+                String artistSearchJson = ssaRequest.getResponse();
+
+                SpotifyGetArtistAlbums artistAlbumsRequest = new SpotifyGetArtistAlbums(token);
+                artistAlbumsRequest.setArtistId(getArtistId(artistSearchJson));
+                Thread artistThread = new Thread(artistAlbumsRequest);
+                artistThread.start();
+                try { artistThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+
+                String albumsJson = artistAlbumsRequest.getResponse();
+
+                SpotifyGetAlbum albumRequest = new SpotifyGetAlbum(token);
+                albumRequest.setAlbumId(parseArtistAlbumsJsonGetAlbumIdJNI(albumsJson));
+                Thread albumThread = new Thread(albumRequest);
+                albumThread.start();
+                try { albumThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+
+                myText = albumRequest.getResponse();
+*/
+
+/*
+                // this returns the first track from the first album from the tracks api endpoint
+                SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
+                Thread ssaRequestThread = new Thread(ssaRequest);
+                ssaRequest.setSearchTerm(myArtist);
+                ssaRequestThread.start();
+                try { ssaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+                String artistSearchJson = ssaRequest.getResponse();
+
+                SpotifyGetArtistAlbums artistAlbumsRequest = new SpotifyGetArtistAlbums(token);
+                artistAlbumsRequest.setArtistId(getArtistId(artistSearchJson));
+                Thread artistThread = new Thread(artistAlbumsRequest);
+                artistThread.start();
+                try { artistThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+
+                String albumsJson = artistAlbumsRequest.getResponse();
+
+                SpotifyGetAlbumTracks albumTracksRequest = new SpotifyGetAlbumTracks(token);
+                albumTracksRequest.setAlbumId(parseArtistAlbumsJsonGetAlbumIdJNI(albumsJson));
+                Thread albumTracksThread = new Thread(albumTracksRequest);
+                albumTracksThread.start();
+                try { albumTracksThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+
+                String albumTracksJson = albumTracksRequest.getResponse();
+
+                SpotifyGetTrack trackRequest = new SpotifyGetTrack(token);
+                trackRequest.setTrackId((parseAlbumTracksJsonGetTrackIdJNI(albumTracksJson)));
+                Thread trackThread = new Thread(trackRequest);
+                trackThread.start();
+                try { trackThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+
+                myText = trackRequest.getResponse();
+*/
                 tv.setText(myText);
             }
         });
@@ -187,94 +264,13 @@ public class MainActivity extends AppCompatActivity {
 
     public native String parseAlbumTracksJsonGetTrackIdJNI(String myJson);
 
-    public native String mapsJNI();
+    public native String getStringJNI();
 
     public native LinkedHashMap<String, String> returnLinkedHashMapJNI();
 
     public native LinkedHashMap<String, Integer> returnIntLinkedHashMapJNI();
 
-    //public native LinkedHashMap<String, String> recommendationJsonToLinkedHashMapJNI(String myJson);
-
-    // unfortunately not all of the recommended albums include popularity
-    //public native String recommendationJsonToLinkedHashMapJNI(String myJson);
-
     public native LinkedHashMap<String, Integer> relatedArtistsJsonToLinkedHashMapJNI(String myJson, boolean myAsc);
 
     public native String parseSearchJsonGetFollowersJNI(String myJson);
 }
-
-
-
-/*
-                SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
-                Thread ssaRequestThread = new Thread(ssaRequest);
-                ssaRequest.setSearchTerm(myArtist);
-                ssaRequestThread.start();
-                try { ssaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-                String artistSearchJson = ssaRequest.getResponse();
-
-                SpotifyGetArtistSimilarArtists sgasaRequest = new SpotifyGetArtistSimilarArtists(token);
-                sgasaRequest.setArtistId(getArtistId(artistSearchJson));
-
-                Thread sgasaRequestThread = new Thread(sgasaRequest);
-                sgasaRequestThread.start();
-                try { sgasaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-
-                myText += parseDumpJsonJNI(sgasaRequest.getResponse());
-*/
-/*
-                SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
-                Thread ssaRequestThread = new Thread(ssaRequest);
-                ssaRequest.setSearchTerm(myArtist);
-                ssaRequestThread.start();
-                try { ssaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-                String artistSearchJson = ssaRequest.getResponse();
-
-                SpotifyGetArtist artistRequest = new SpotifyGetArtist(token);
-                artistRequest.setArtistId(getArtistId(artistSearchJson));
-                Thread artistThread = new Thread(artistRequest);
-                artistThread.start();
-                try { artistThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-
-                myText = artistRequest.getResponse();
-*/
-/*
-                SpotifySearchArtist ssaRequest = new SpotifySearchArtist(token);
-                Thread ssaRequestThread = new Thread(ssaRequest);
-                ssaRequest.setSearchTerm(myArtist);
-                ssaRequestThread.start();
-                try { ssaRequestThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-                String artistSearchJson = ssaRequest.getResponse();
-
-                SpotifyGetArtistAlbums artistAlbumsRequest = new SpotifyGetArtistAlbums(token);
-                artistAlbumsRequest.setArtistId(getArtistId(artistSearchJson));
-                Thread artistThread = new Thread(artistAlbumsRequest);
-                artistThread.start();
-                try { artistThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-
-                String albumsJson = artistAlbumsRequest.getResponse();
-
-                SpotifyGetAlbum albumRequest = new SpotifyGetAlbum(token);
-                albumRequest.setAlbumId(parseArtistAlbumsJsonGetAlbumIdJNI(albumsJson));
-                Thread albumThread = new Thread(albumRequest);
-                albumThread.start();
-                try { albumThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-
-                myText = albumRequest.getResponse();
-
-                SpotifyGetAlbumTracks albumTracksRequest = new SpotifyGetAlbumTracks(token);
-                albumTracksRequest.setAlbumId(parseArtistAlbumsJsonGetAlbumIdJNI(albumsJson));
-                Thread albumTracksThread = new Thread(albumTracksRequest);
-                albumTracksThread.start();
-                try { albumTracksThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-
-                String albumTracksJson = albumTracksRequest.getResponse();
-
-                SpotifyGetTrack trackRequest = new SpotifyGetTrack(token);
-                trackRequest.setTrackId((parseAlbumTracksJsonGetTrackIdJNI(albumTracksJson)));
-                Thread trackThread = new Thread(trackRequest);
-                trackThread.start();
-                try { trackThread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-
-                myText = trackRequest.getResponse();
-*/
